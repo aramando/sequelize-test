@@ -1,15 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
-const config = require('./config.js');
 
 const { DataTypes } = Sequelize;
 
 const sequelize = new Sequelize(
-  config.database, 
-  config.username, 
-  config.password, 
-  config.sequelize
+  'sequelize_test', 
+  '', 
+  '', 
+  {
+    dialect: 'sqlite', 
+    storage: `${__dirname}/data.db`,
+    logging: true
+  }
 );
 
 const Album = sequelize.define('Album', {
