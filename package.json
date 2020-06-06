@@ -7,8 +7,8 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "node app.js",
-    "start-init": "node app.js --init-db"
+    "start": "nodemon app.js",
+    "start-init": "nodemon app.js --init-db"
   },
   "author": "",
   "license": "ISC",

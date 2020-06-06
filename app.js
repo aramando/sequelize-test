@@ -65,18 +65,18 @@ app.get('/images', async (req, res) => {
       {
         model: Album,
         as: 'album',
-        where: {} // BREAKS
+        where: {} // BREAKING
       },
-      // BREAKS:
+      // BREAKING:
       {
         model: Tag,
         as: 'tags',
         attributes: ['id'],
       }
     ],
-    limit: 50, // BREAKS
+    limit: 50, // BREAKING
     order: [ 
-      ['album', 'name', 'ASC'] // BREAKS
+      ['album', 'name', 'ASC'] // BREAKING
     ]
   };
 
