@@ -50,7 +50,6 @@ const Image = sequelize.define('Image', {
 
 Image.belongsTo(Album, { as: 'album', foreignKey: 'albumId' });
 Image.belongsToMany(Tag, { as: 'tags', through: 'Images_Tags' });
-Tag.belongsToMany(Image, { through: 'Images_Tags' });
 
 sequelize.sync({ force: process.argv.includes('--init-db') });
 
@@ -59,29 +58,27 @@ const app = express();
 const port = 3000;
 app.use(bodyParser.json());
 
-app.get('/images', async (req, res) => {      
-  const opts = {
-    include: [
-      {
-        model: Album,
-        as: 'album',
-        where: {} // BREAKING
-      },
-      // BREAKING:
-      {
-        model: Tag,
-        as: 'tags',
-        attributes: ['id'],
-      }
-    ],
-    limit: 50, // BREAKING
-    order: [ 
-      ['album', 'name', 'ASC'] // BREAKING
-    ]
-  };
-
+app.get('/images', async (req, res) => {
   try {
-    const images = await Image.findAll(opts);
+    const images = await Image.findAll({
+      include: [
+        {
+          model: Album,
+          as: 'album',
+          where: {} // BREAKING
+        },
+        // BREAKING:
+        {
+          model: Tag,
+          as: 'tags',
+          attributes: ['id'],
+        }
+      ],
+      limit: 50, // BREAKING
+      order: [ 
+        ['album', 'name', 'ASC'] // BREAKING
+      ]
+    });
     res.json(images);
   } catch (err) {
     console.log(err)
