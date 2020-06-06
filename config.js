@@ -10,8 +10,6 @@ module.exports = {
     define: {
       paranoid: true,
       timestamps: true,
-      // do not enable: 
-      // underscored: true,
       underscoredAll: true        
     }
   },
