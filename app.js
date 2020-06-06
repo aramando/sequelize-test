@@ -52,6 +52,8 @@ Image.belongsTo(Album, { as: 'album', foreignKey: 'albumId' });
 Image.belongsToMany(Tag, { as: 'tags', through: 'Images_Tags' });
 Tag.belongsToMany(Image, { through: 'Images_Tags' });
 
+sequelize.sync({ force: process.argv.includes('--init-db') });
+
 
 const app = express();
 const port = 3000;
