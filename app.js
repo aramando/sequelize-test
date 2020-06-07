@@ -1,4 +1,3 @@
-const express = require('express');
 const bodyParser = require('body-parser');
 const Sequelize = require('sequelize');
 
@@ -14,6 +13,18 @@ const sequelize = new Sequelize(
     logging: true
   }
 );
+
+const Image = sequelize.define('Image', {
+  id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  filename: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  }
+})
 
 const Album = sequelize.define('Album', {
   id: {
@@ -39,56 +50,30 @@ const Tag = sequelize.define('Tag', {
   },    
 })
 
-const Image = sequelize.define('Image', {
-  id: {
-    type: DataTypes.INTEGER,
-    primaryKey: true,
-    autoIncrement: true
-  },
-  filename: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  }
-})
-
 Image.belongsTo(Album, { as: 'album', foreignKey: 'albumId' });
-Image.belongsToMany(Tag, { as: 'tags', through: 'Images_Tags' });
+Image.hasMany(Tag, { as: 'tags' });
 
-sequelize.sync({ force: process.argv.includes('--init-db') });
-
-
-const app = express();
-const port = 3000;
-app.use(bodyParser.json());
-
-app.get('/images', async (req, res) => {
-  try {
+sequelize
+  .sync({ force: process.argv.includes('--init-db') })
+  .then(async () => {
     const images = await Image.findAll({
       include: [
         {
           model: Album,
           as: 'album',
-          where: {} // BREAKING
+          where: { name: '' }, // BREAKING
         },
         // BREAKING:
         {
           model: Tag,
           as: 'tags',
-          attributes: ['id'],
         }
       ],
       limit: 50, // BREAKING
       order: [ 
-        ['album', 'name', 'ASC'] // BREAKING
+        ['album', 'name', 'ASC'] // BREAKING  
       ]
-    });
-    res.json(images);
-  } catch (err) {
-    console.log(err)
-    res.status(500).send(err.message)
-  }
-});
-
-app.listen(port, () => {
-  console.info(`Server listening on port ${port}`);
-});
+    }); 
+    console.log(images);
+  })
+  .catch(error => console.log(error))

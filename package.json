@@ -7,17 +7,14 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "nodemon app.js",
-    "start-init": "nodemon app.js --init-db"
+    "start": "node app.js",
+    "init": "node app.js --init-db"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1",
     "sequelize": "^6.0.0-beta.6",
     "sqlite3": "^4.2.0"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.4"
-  }
+  "devDependencies": {}
 }
